@@ -7,7 +7,7 @@ import os
 import pickle
 import pandas as pd
 
-BASE_ROOT = os.getcwd()
+BASE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_ROOT = os.path.join(BASE_ROOT, 'data')
 MODEL_ROOT = os.path.join(BASE_ROOT, 'models')
 PREPARED_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'prepared')
@@ -75,9 +75,8 @@ for group_name, group_list in BIAS_TERM_DICT.items():
     print(f'{group_name}:')
     for term in group_list:
         group_mask = test_df[f'{group_name}_majority'] == term
-        group_f1_score = fbeta_score(test_df.loc[group_mask, 'target'], y_test_pred[group_mask], beta=1, average='binary')
         group_f2_score = fbeta_score(test_df.loc[group_mask, 'target'], y_test_pred[group_mask], beta=2, average='binary')
-        print(f'  {term}: F1 Score: {100 * group_f1_score:.4f}%, F2 Score: {100 * group_f2_score:.4f}%')
+        print(f'  {term} -> F2-Score: {100 * group_f2_score:.4f}%')
 
 
 print('== Debiasing ==')
@@ -90,11 +89,10 @@ for group_name, group_list in BIAS_TERM_DICT.items():
         best_threshold = float(thresholds[f2_scores.argmax()])
         y_test_pred[group_mask] = (y_prob >= best_threshold).astype(int)
 
-print('== Group Metrics (Before Debiasing) ==')
+print('== Group Metrics (After Debiasing) ==')
 for group_name, group_list in BIAS_TERM_DICT.items():
     print(f'{group_name}:')
     for term in group_list:
         group_mask = test_df[f'{group_name}_majority'] == term
-        group_f1_score = fbeta_score(test_df.loc[group_mask, 'target'], y_test_pred[group_mask], beta=1, average='binary')
         group_f2_score = fbeta_score(test_df.loc[group_mask, 'target'], y_test_pred[group_mask], beta=2, average='binary')
-        print(f'  {term}: F1 Score: {100 * group_f1_score:.4f}%, F2 Score: {100 * group_f2_score:.4f}%')
+        print(f'  {term} -> F2-Score: {100 * group_f2_score:.4f}%')

@@ -6,7 +6,7 @@ DATASET_NAME = os.path.basename(__file__)[10:-3]
 
 BASE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_ROOT = os.path.join(BASE_ROOT, 'data')
-ZIP_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'raw', 'zip')
+ZIP_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'utility', 'shape_files')
 RAW_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'raw', DATASET_NAME)
 TRANSFORMED_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'transformed')
 

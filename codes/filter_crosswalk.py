@@ -4,11 +4,11 @@ import pandas as pd
 
 DATASET_NAME = os.path.basename(__file__)[7:-3]
 
-BASE_ROOT = os.getcwd()
+BASE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_ROOT = os.path.join(BASE_ROOT, 'data')
-ZIP_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'raw', 'zip')
+ZIP_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'utility', 'shape_files')
 RAW_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'raw', DATASET_NAME)
-CLEAN_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'raw', DATASET_NAME, 'csv')
+CROSS_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'utility', 'crosswalk_files')
 
 zip_path = os.path.join(ZIP_DATA_FOLDER_PATH, 'City_of_Los_Angeles_Zip_Codes.shp')
 zip_gdf:gpd.GeoDataFrame = gpd.read_file(zip_path)
@@ -42,7 +42,7 @@ for raw_file_name in raw_file_name_list:
     raw_df_list.append(raw_df)
 
 clean_df = pd.concat(raw_df_list, ignore_index=True)
-clean_path = os.path.join(CLEAN_DATA_FOLDER_PATH, f'{DATASET_NAME}.csv')
-if not os.path.exists(CLEAN_DATA_FOLDER_PATH):
-    os.makedirs(CLEAN_DATA_FOLDER_PATH)
+clean_path = os.path.join(CROSS_DATA_FOLDER_PATH, f'{DATASET_NAME}.csv')
+if not os.path.exists(CROSS_DATA_FOLDER_PATH):
+    os.makedirs(CROSS_DATA_FOLDER_PATH)
 clean_df.to_csv(clean_path, index=False)

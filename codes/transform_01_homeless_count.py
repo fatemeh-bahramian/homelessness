@@ -5,8 +5,8 @@ DATASET_NAME = os.path.basename(__file__)[10:-3]
 
 BASE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_ROOT = os.path.join(BASE_ROOT, 'data')
-CROSS_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'prepared', 'crosswalks')
-RAW_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'raw', DATASET_NAME, 'csv')
+CROSS_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'utility', 'crosswalk_files')
+RAW_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'utility', 'homeless_count_files')
 TRANSFORMED_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'transformed')
 
 cross_path = os.path.join(CROSS_DATA_FOLDER_PATH, 'crosswalk.csv')

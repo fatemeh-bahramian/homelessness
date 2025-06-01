@@ -1,30 +1,38 @@
 import os
-import pandas as pd
 import geopandas as gpd
+import pandas as pd
 
-DATASET_NAME = os.path.basename(__file__)[17:-3]
+DATASET_NAME = os.path.basename(__file__)[10:-3]
 
-BASE_ROOT = os.getcwd()
+BASE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_ROOT = os.path.join(BASE_ROOT, 'data')
 ZIP_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'raw', 'zip')
 RAW_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'raw', DATASET_NAME)
 TRANSFORMED_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'transformed')
 
 GROUPING_DICT = {
-    'population': ['B01001_001E'],  # Total
-    'population_male': ['B01001_002E'],  # Male
-    'population_female': ['B01001_026E'],  # Female
-    'population_age_below_24': [
-        'B01001_003E', 'B01001_004E', 'B01001_005E', 'B01001_006E', 'B01001_007E', 'B01001_008E', 'B01001_009E', 'B01001_010E',  # Male: 0-5, 5-9, 10-14, 15-17, 18-19, 20, 21, 22-24
-        'B01001_027E', 'B01001_028E', 'B01001_029E', 'B01001_030E', 'B01001_031E', 'B01001_032E', 'B01001_033E', 'B01001_034E'  # Female: 0-5, 5-9, 10-14, 15-17, 18-19, 20, 21, 22-24
+    'population_white': [
+        'B03002_003E',  # Non-Hispanic White alone
+        'B03002_013E'   # Hispanic White alone
     ],
-    'population_age_between_25_44': [
-        'B01001_011E', 'B01001_012E', 'B01001_013E', 'B01001_014E', # Male: 25-29, 30-34, 35-39, 40-44
-        'B01001_035E', 'B01001_036E', 'B01001_037E', 'B01001_038E' # Female: 25-29, 30-34, 35-39, 40-44
+    'population_black': [
+        'B03002_004E',  # Non-Hispanic Black or African American alone
+        'B03002_014E'   # Hispanic Black or African American alone
     ],
-    'population_age_above_45': [
-        'B01001_015E', 'B01001_016E', 'B01001_017E', 'B01001_018E', 'B01001_019E', 'B01001_020E', 'B01001_021E', 'B01001_022E', 'B01001_023E', 'B01001_024E', 'B01001_025E', # Male: 45-49, 50-54, 55-59, 60-61, 62-64, 65-66, 67-69, 70-74, 75-79, 80-84, 85+
-        'B01001_039E', 'B01001_040E', 'B01001_041E', 'B01001_042E', 'B01001_043E', 'B01001_044E', 'B01001_045E', 'B01001_046E', 'B01001_047E', 'B01001_048E', 'B01001_049E' # Female: 45-49, 50-54, 55-59, 60-61, 62-64, 65-66, 67-69, 70-74, 75-79, 80-84, 85+
+    'population_hispanic': [
+        'B03002_012E'   # Total Hispanic or Latino population (any race)
+    ],
+    'population_other_races': [
+        'B03002_005E',  # Non-Hispanic American Indian and Alaska Native alone
+        'B03002_015E',  # Hispanic American Indian and Alaska Native alone
+        'B03002_006E',  # Non-Hispanic Asian alone
+        'B03002_016E',  # Hispanic Asian alone
+        'B03002_007E',  # Non-Hispanic Native Hawaiian and Other Pacific Islander alone
+        'B03002_017E',  # Hispanic Native Hawaiian and Other Pacific Islander alone
+        'B03002_008E',  # Non-Hispanic Some Other Race alone
+        'B03002_018E',  # Hispanic Some Other Race alone
+        'B03002_009E',  # Non-Hispanic Two or More Races
+        'B03002_019E'   # Hispanic Two or More Races
     ]
 }
 

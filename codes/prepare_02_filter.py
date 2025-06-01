@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-BASE_ROOT = os.getcwd()
+BASE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_ROOT = os.path.join(BASE_ROOT, 'data')
 PREPARED_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'prepared')
 

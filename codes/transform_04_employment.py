@@ -1,43 +1,46 @@
 import os
-import geopandas as gpd
 import pandas as pd
+import geopandas as gpd
 
-DATASET_NAME = os.path.basename(__file__)[17:-3]
+DATASET_NAME = os.path.basename(__file__)[10:-3]
 
-BASE_ROOT = os.getcwd()
+BASE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_ROOT = os.path.join(BASE_ROOT, 'data')
 ZIP_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'raw', 'zip')
 RAW_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'raw', DATASET_NAME)
 TRANSFORMED_DATA_FOLDER_PATH = os.path.join(DATA_ROOT, 'transformed')
 
 GROUPING_DICT = {
-    'population_white': [
-        'B03002_003E',  # Non-Hispanic White alone
-        'B03002_013E'   # Hispanic White alone
+    'unemployment_rate': ['S2301_C04_001E'],  # Total
+    'unemployment_rate_male': ['S2301_C04_020E'],  # Male
+    'unemployment_rate_female': ['S2301_C04_021E'], # Female
+    'unemployment_rate_age_below_24': [
+        'S2301_C04_002E',  # 16-19
+        'S2301_C04_003E'   # 20-24
     ],
-    'population_black': [
-        'B03002_004E',  # Non-Hispanic Black or African American alone
-        'B03002_014E'   # Hispanic Black or African American alone
+    'unemployment_rate_age_between_25_44': [
+        'S2301_C04_004E'   # 25-44
     ],
-    'population_hispanic': [
-        'B03002_012E'   # Total Hispanic or Latino population (any race)
+    'unemployment_rate_age_above_45': [
+        'S2301_C04_005E',  # 45-54
+        'S2301_C04_006E',  # 55-64
+        'S2301_C04_007E',  # 65-74
+        'S2301_C04_008E'   # 75+
     ],
-    'population_other_races': [
-        'B03002_005E',  # Non-Hispanic American Indian and Alaska Native alone
-        'B03002_015E',  # Hispanic American Indian and Alaska Native alone
-        'B03002_006E',  # Non-Hispanic Asian alone
-        'B03002_016E',  # Hispanic Asian alone
-        'B03002_007E',  # Non-Hispanic Native Hawaiian and Other Pacific Islander alone
-        'B03002_017E',  # Hispanic Native Hawaiian and Other Pacific Islander alone
-        'B03002_008E',  # Non-Hispanic Some Other Race alone
-        'B03002_018E',  # Hispanic Some Other Race alone
-        'B03002_009E',  # Non-Hispanic Two or More Races
-        'B03002_019E'   # Hispanic Two or More Races
+    'unemployment_rate_white': ['S2301_C04_010E'],  # White
+    'unemployment_rate_black': ['S2301_C04_011E'],  # Black
+    'unemployment_rate_hispanic': ['S2301_C04_017E'],  # Hispanic, Latin, or Mexican
+    'unemployment_rate_other_races': [
+        'S2301_C04_012E', # Native American or Alaskan Native
+        'S2301_C04_013E', # Chinese, Japanese, Korean, Vietnamese, Asian Indian, Filipino, Other Asian
+        'S2301_C04_014E', 'S2301_C02_014E',  # Native Hawaiian
+        'S2301_C04_015E', 'S2301_C02_015E',  # Other race
+        'S2301_C04_016E', 'S2301_C02_016E'   # Two or more races
     ]
 }
 
 zip_path = os.path.join(ZIP_DATA_FOLDER_PATH, 'City_of_Los_Angeles_Zip_Codes.shp')
-zip_gdf:gpd.GeoDataFrame = gpd.read_file(zip_path)
+zip_gdf: gpd.GeoDataFrame = gpd.read_file(zip_path)
 zip_gdf['ZCTA5CE10'] = zip_gdf['ZCTA5CE10'].astype(str).str.zfill(5)
 
 raw_file_name_list = list[str]()
@@ -75,7 +78,7 @@ transformed_df = pd.DataFrame({
 for group_name, column_name_list in GROUPING_DICT.items():
     transformed_df[group_name] = raw_df[column_name_list].sum(axis=1, min_count=1)
 transformed_df.sort_values(['year', 'zip_code'], inplace=True)
-
+    
 print('== Storage ==')
 transformed_path = os.path.join(TRANSFORMED_DATA_FOLDER_PATH, f'{DATASET_NAME}.csv')
 transformed_df.to_csv(transformed_path, index=False)

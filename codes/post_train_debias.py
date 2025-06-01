@@ -41,7 +41,7 @@ n_estimators = 203
 learning_rate = 0.001499
 
 print('== Pipeline Retrieval ==')
-best_pipeline_path = os.path.join(MODEL_ROOT, f'xgboost_{total_lags}_{max_depth}_{n_estimators}_{learning_rate}.pickle')
+best_pipeline_path = os.path.join(MODEL_ROOT, f'xgboost_f2_score.pickle')
 with open(best_pipeline_path, 'rb') as pipeline_file:
     scaler, model = tuple[StandardScaler, XGBClassifier](pickle.load(pipeline_file))
 
